@@ -1,7 +1,22 @@
 import { CheckIcon } from "@heroicons/react/outline"
 import React from "react"
 
-const ListItem = ({ index }) => {
+const ListItem = ({
+  taskTitle,
+  taskDescription,
+  taskStatus,
+  taskTags,
+  taskPriority,
+  index,
+}) => {
+  const priorityArr = ["normal", "urgent", "sensitive"]
+  const priorityClassNames =
+    priorityArr[taskPriority] === "normal"
+      ? `bg-green-200 border-green-500`
+      : priorityArr[taskPriority] === "urgent"
+      ? `bg-orange-200 border-orange-500`
+      : `bg-red-200 border-red-500`
+
   return (
     <div
       key={`list-item-${index}`}
@@ -14,9 +29,14 @@ const ListItem = ({ index }) => {
             className="text-orange-100 scale-50 group-hover:scale-105 group-hover:text-orange-400"
           />
         </div>
-        <div className="font-medium">Setup Jobs-bharo Application</div>
+        <div className="font-medium">{taskTitle}</div>
       </div>
-      <div className="text-xl font-medium">Personal</div>
+      <div
+        className={`relative z-10 text-xl font-medium h-4 w-4 rounded-full shadow-md border-[1.5px]  ${priorityClassNames}`}
+      >
+        {" "}
+        <div className="absolute top-0 left-0 right-0 bottom-0 rounded-full bg-inherit scale-[2] animate-pulse"></div>
+      </div>
     </div>
   )
 }

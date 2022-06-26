@@ -4,7 +4,24 @@ import TaskContext from "./TaskContext"
 export const TaskProvider = ({ children }) => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState([])
-  const [tasks, setTasks] = useState([])
+  const [tasks, setTasks] = useState([
+    {
+      taskTitle: "Complete Jobs-bharo Documentation",
+      taskDescription:
+        "Complete the jobs-bharo documentation, inlucde the milestones, tech stask, pricing and timeline for the project.",
+      taskPriority: 1,
+      taskTags: ["React.js", "MERN Stack"],
+      taskStatus: "pending",
+    },
+    {
+      taskTitle: "Setup Wannabae For Meeting",
+      taskDescription:
+        "Setup the wannabae app for the meeting, check if all the screens are working fine and the API integrations are working properly. Create teh APP apk build and send to Utkarsh Sir.",
+      taskPriority: 2,
+      taskTags: ["React Native", "Expo"],
+      taskStatus: "pending",
+    },
+  ])
   const [addTask, setAddTask] = useState(false)
 
   const AddNewTask = ({
