@@ -1,0 +1,5 @@
+export const OPEN_ADD_TASK = "OPEN_ADD_TASK"
+export const CLOSE_ADD_TASK = "CLOSE_ADD_TASK"
+export const ADD_NEW_TASK = "ADD_NEW_TASK"
+export const UPDATE_TASK = "UPDATE_TASK"
+export const GET_ALL_TASKS = "GET_ALL_TASKS"

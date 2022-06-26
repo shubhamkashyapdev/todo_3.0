@@ -18,7 +18,7 @@ const Card = () => {
         initial={{ y: -400, opacity: 0 }}
         animate={{ y: -100, opacity: 1 }}
         exit={{ y: -400, opacity: 0 }}
-        className="container flex justify-center items-center absolute top-[50%] translate-y-[-50%] z-20"
+        className="container flex justify-center items-center absolute top-[100%]  z-20"
       >
         <div className="w-[60%] px-4 py-4 mx-auto shadow-2xl rounded-xl border-[1px] border-zinc-200 bg-white">
           <div className="">

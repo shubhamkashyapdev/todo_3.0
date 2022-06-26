@@ -1,10 +1,17 @@
-import { useState } from "react"
+import { useReducer, useState } from "react"
+import {
+  ADD_NEW_TASK,
+  CLOSE_ADD_TASK,
+  GET_ALL_TASKS,
+  OPEN_ADD_TASK,
+  UPDATE_TASK,
+} from "./TaskTypes"
 import TaskContext from "./TaskContext"
-
-export const TaskProvider = ({ children }) => {
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState([])
-  const [tasks, setTasks] = useState([
+import reducer from "./TaskReducer"
+const initialState = {
+  loading: false,
+  error: [],
+  tasks: [
     {
       taskTitle: "Complete Jobs-bharo Documentation",
       taskDescription:
@@ -21,42 +28,34 @@ export const TaskProvider = ({ children }) => {
       taskTags: ["React Native", "Expo"],
       taskStatus: "pending",
     },
-  ])
-  const [addTask, setAddTask] = useState(false)
+  ],
+  addTask: false,
+}
 
-  const AddNewTask = ({
-    taskTitle,
-    taskDescription,
-    taskCateogryNum,
-    taskTags,
-  }) => {
-    const task = { taskTitle, taskDescription, taskCateogryNum, taskTags }
-    if (
-      typeof taskTitle !== String ||
-      typeof taskDescription !== String ||
-      typeof taskTags !== String ||
-      typeof taskCateogryNum !== Number
-    ) {
-      setError((prevError) => {
-        return [...prevError, "Invalid Task Date Provided"]
-      })
-    } else {
-      setTasks((prevTasks) => {
-        return [...prevTasks, task]
-      })
-    }
-  }
+export const TaskProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(reducer, initialState)
 
   const openAddTask = () => {
-    setAddTask(true)
+    dispatch({ type: OPEN_ADD_TASK })
   }
   const closeAddTask = () => {
-    setAddTask(false)
+    dispatch({ type: CLOSE_ADD_TASK })
   }
 
-  const state = { loading, error, tasks, addTask }
-  const actions = { AddNewTask, openAddTask, closeAddTask }
-  const taskState = { ...state, ...actions }
+  const addNewTask = (data) => {
+    dispatch({ type: ADD_NEW_TASK, payload: data })
+  }
+  const updateTask = (id, data) => {
+    dispatch({ type: UPDATE_TASK, payload: { id, data } })
+  }
+
+  const taskState = {
+    ...state,
+    openAddTask,
+    closeAddTask,
+    addNewTask,
+    updateTask,
+  }
   return (
     <TaskContext.Provider value={taskState}>{children}</TaskContext.Provider>
   )

@@ -10,14 +10,14 @@ const App = () => {
   const { addTask } = useContext(TaskContext)
   return (
     <>
-      <div>
+      <div className="relative w-[90%] max-w-5xl mt-10 mx-auto">
         <div>
           <Header />
           <TopBar />
           <List />
         </div>
+        {addTask && <Card handleModal={() => setShow(false)} />}
       </div>
-      {addTask && <Card handleModal={() => setShow(false)} />}
     </>
   )
 }
