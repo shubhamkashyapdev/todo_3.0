@@ -1,165 +1,134 @@
 //SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.0;
 
-contract Todo {
-    uint256 public todoCount = 0;
-    //@TODO list of users
+contract Task {
+    uint256 public taskCount = 0;
+    //@Task list of users
 
-    // list of todos
+    // list of tasks
     enum Status {
         pending,
         done
     }
-    enum Category {
-        sensitive,
+    enum Priority {
+        normal,
         urgent,
-        normal
+        sensitive
     }
 
-    struct TodoStruct {
-        string task;
+    struct TaskStruct {
         string taskTitle;
-        Category taskCategory;
+        string taskDescription;
+        Priority taskPriority;
         string[] taskTags;
-        Status status;
+        Status taskStatus;
         uint256 createdAt;
         uint256 updatedAt;
         bool isValue;
         address user;
     }
 
-    mapping(uint256 => TodoStruct) todos;
-    TodoStruct[] public todosArr;
+    mapping(uint256 => TaskStruct) tasks;
+    TaskStruct[] public tasksArr;
 
-    // user to todos relation
+    // user to tasks relation
 
     // ---------- Functions ----------- //
 
-    function addTodo(
-        string memory _task,
+    function addTask(
+        string memory _taskDescription,
         string memory _taskTitle,
-        Category _taskCategory,
+        Priority _taskPriority,
         string[] memory _taskTags
     ) public {
-        require(bytes(_task).length > 0, "Please add a valid todo item!");
-
-        // update todo count
-        todoCount += 1;
-        // add todo to todos mapping
-        todos[todoCount] = TodoStruct(
-            _task,
-            _taskTitle,
-            Category(_taskCategory),
-            _taskTags,
-            Status.pending,
-            block.timestamp,
-            block.timestamp,
-            true,
-            msg.sender
-        );
-        todosArr.push(
-            TodoStruct(
-                _task,
-                _taskTitle,
-                Category(_taskCategory),
-                _taskTags,
-                Status.pending,
-                block.timestamp,
-                block.timestamp,
-                true,
-                msg.sender
-            )
+        // update task count
+        taskCount += 1;
+        // add task to tasks mapping
+        tasks[taskCount] = TaskStruct({
+            taskTitle: _taskTitle,
+            taskDescription: _taskDescription,
+            taskPriority: Priority(_taskPriority),
+            taskTags: _taskTags,
+            taskStatus: Status.pending,
+            createdAt: block.timestamp,
+            updatedAt: block.timestamp,
+            isValue: true,
+            user: msg.sender
+        });
+        tasksArr.push(
+            TaskStruct({
+                taskTitle: _taskTitle,
+                taskDescription: _taskDescription,
+                taskPriority: Priority(_taskPriority),
+                taskTags: _taskTags,
+                taskStatus: Status.pending,
+                createdAt: block.timestamp,
+                updatedAt: block.timestamp,
+                isValue: true,
+                user: msg.sender
+            })
         );
     }
 
-    function updateTodo(
+    function updateTask(
         uint8 _num,
-        string memory _task,
         string memory _taskTitle,
-        Category _taskCategory,
+        string memory _taskDescription,
+        Priority _taskPriority,
         string[] memory _taskTags,
         Status _status
     ) public {
-        // check if the todo item exists
+        // check if the task item exists
         require(
-            todos[_num].isValue,
-            "Todo item does not exists you want to update"
+            tasks[_num].isValue,
+            "Task item does not exists you want to update"
         );
-        // check if user updating the todo is the one who had created it
+        // check if user updating the task is the one who had created it
         require(
-            todos[_num].user == msg.sender,
-            "Not authorized to update the todo item!"
+            tasks[_num].user == msg.sender,
+            "Not authorized to update the task item!"
         );
-        if (
-            keccak256(abi.encodePacked(_status)) ==
-            keccak256(abi.encodePacked("done"))
-        ) {
-            todos[_num] = TodoStruct(
-                _task,
-                _taskTitle,
-                Category(_taskCategory),
-                _taskTags,
-                Status.done,
-                todos[_num].createdAt,
-                block.timestamp,
-                true,
-                msg.sender
-            );
-            todosArr[_num] = TodoStruct(
-                _task,
-                _taskTitle,
-                Category(_taskCategory),
-                _taskTags,
-                Status.done,
-                todos[_num].createdAt,
-                block.timestamp,
-                true,
-                msg.sender
-            );
-        } else {
-            todos[_num] = TodoStruct(
-                _task,
-                _taskTitle,
-                Category(_taskCategory),
-                _taskTags,
-                Status.pending,
-                todos[_num].createdAt,
-                block.timestamp,
-                true,
-                msg.sender
-            );
-            todosArr[_num] = TodoStruct(
-                _task,
-                _taskTitle,
-                Category(_taskCategory),
-                _taskTags,
-                Status.pending,
-                todos[_num].createdAt,
-                block.timestamp,
-                true,
-                msg.sender
-            );
-        }
+        tasks[_num] = TaskStruct({
+            taskTitle: _taskTitle,
+            taskDescription: _taskDescription,
+            taskPriority: Priority(_taskPriority),
+            taskTags: _taskTags,
+            taskStatus: Status(_status),
+            createdAt: block.timestamp,
+            updatedAt: block.timestamp,
+            isValue: true,
+            user: msg.sender
+        });
+        tasksArr[_num] = TaskStruct({
+            taskTitle: _taskTitle,
+            taskDescription: _taskDescription,
+            taskPriority: Priority(_taskPriority),
+            taskTags: _taskTags,
+            taskStatus: Status(_status),
+            createdAt: block.timestamp,
+            updatedAt: block.timestamp,
+            isValue: true,
+            user: msg.sender
+        });
     }
 
-    // get single todo
-    function getTodo(uint256 _num) public view returns (TodoStruct memory) {
-        require(_num <= todoCount, "Invalid Todo Number");
-        require(_num >= 0, "Todo count can not be less than zero");
-        // check if the todo item exists
+    // get single task
+    function getTask(uint256 _num) public view returns (TaskStruct memory) {
+        require(_num <= taskCount, "Invalid Task Number");
+        require(_num >= 0, "Task count can not be less than zero");
+        // check if the task item exists
         require(
-            todos[_num].isValue,
-            "Todo item does not exists you want to update"
+            tasks[_num].isValue,
+            "Task item does not exists you want to update"
         );
-        return todos[_num];
+        return tasks[_num];
     }
 
-    function getAllTodos() public view returns (TodoStruct[] memory) {
-        return todosArr;
+    function getAllTasks() public view returns (TaskStruct[] memory) {
+        return tasksArr;
+    }
+
+    function getTaskCount() public view returns (uint256) {
+        return tasksArr.length;
     }
 }
-// const instance = await Todo.deployed()
-// await instance.addTodo("Setup a new proect for jobs-bharo application in next.js as frontend and typescript express as backend","Jobs-bharo Application Setup - 4",2,["React.js","Next.js","Typescript","Express","MongoDB"])
-// await instance.updateTodo(2,"Setup a new proect for jobs-bharo application in next.js as frontend and typescript express as backend - UPDATED","Jobs-bharo Application Setup - 2",2,["React.js","Next.js","Typescript","Express","MongoDB"],0)
-// let todoCount = await instance.todoCount()  | todoCount.toString() => will return the todo count in blockchain ledger
-// const todos = await instance.getAllTodos() | todos => will return all todos in blockchain ledger
