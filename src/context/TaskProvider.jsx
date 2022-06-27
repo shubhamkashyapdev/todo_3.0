@@ -18,7 +18,7 @@ const initialState = {
         "Complete the jobs-bharo documentation, inlucde the milestones, tech stask, pricing and timeline for the project.",
       taskPriority: 1,
       taskTags: ["React.js", "MERN Stack"],
-      taskStatus: "pending",
+      isPending: true,
     },
     {
       taskTitle: "Setup Wannabae For Meeting",
@@ -26,7 +26,7 @@ const initialState = {
         "Setup the wannabae app for the meeting, check if all the screens are working fine and the API integrations are working properly. Create teh APP apk build and send to Utkarsh Sir.",
       taskPriority: 2,
       taskTags: ["React Native", "Expo"],
-      taskStatus: "pending",
+      isPending: true,
     },
   ],
   addTask: false,
