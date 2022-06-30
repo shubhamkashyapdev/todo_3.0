@@ -4,6 +4,7 @@ import {
   GET_ALL_TASKS,
   OPEN_ADD_TASK,
   UPDATE_TASK,
+  SET_ALL_TASKS,
 } from "./TaskTypes"
 
 const reducer = (state, action) => {
@@ -13,6 +14,11 @@ const reducer = (state, action) => {
       return {
         ...state,
         tasks: [...state.tasks, payload],
+      }
+    case SET_ALL_TASKS:
+      return {
+        ...state,
+        tasks: [...state.tasks, ...payload],
       }
     case UPDATE_TASK:
       const { id, data } = payload

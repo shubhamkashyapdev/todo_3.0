@@ -8,15 +8,11 @@ const List = () => {
     <>
       {tasks.map((item, index) => (
         <>
-          <ListItem {...item} index={index} />
+          <ListItem taskTitle={item[1]} index={index} />
         </>
       ))}
     </>
   )
-}
-
-List.defaultProps = {
-  items: [{}, {}, {}, {}],
 }
 
 export default List

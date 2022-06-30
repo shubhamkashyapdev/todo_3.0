@@ -9,13 +9,13 @@ import React, { useContext, useEffect, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import TaskContext from "../../context/TaskContext"
 
-const Card = () => {
+const Card = ({ addNewTaskToChain }) => {
   const { closeAddTask, addNewTask } = useContext(TaskContext)
   const [task, setTask] = useState({
     taskTitle: "",
     taskDescription: "",
   })
-  const [taskTags, setTaskTags] = useState([])
+  const [taskTags, setTaskTags] = useState(["React.js"])
   const [taskPriority, setTaskPriority] = useState(0)
   const [errors, setErrors] = useState(["Web3.0"])
   const priorityArr = ["normal", "urgent", "sensitive"]
@@ -40,8 +40,6 @@ const Card = () => {
   }
 
   const handleAddTask = (e) => {
-    console.log(task.taskTitle.length, task.taskDescription.length)
-
     if (task.taskTitle.length < 4) {
       setErrors((errors) => {
         return [...errors, "Title should be more than 3 characters long"]
@@ -54,8 +52,14 @@ const Card = () => {
       })
     }
     if (task.taskDescription?.length >= 10 && task.taskTitle.length >= 4) {
-      const data = { ...task, taskPriority, taskTags }
+      const data = [
+        task.taskTitle,
+        task.taskDescription,
+        taskPriority,
+        taskTags,
+      ]
       addNewTask(data)
+      addNewTaskToChain(data)
       //@todo - clear the state
       handleClearState()
     }
@@ -71,6 +75,7 @@ const Card = () => {
       clearTimeout(timeout)
     }
   }, [errors])
+  const { taskTitle, taskDescription } = task
   return (
     <>
       {errors.map((error) => (
@@ -93,7 +98,7 @@ const Card = () => {
           initial={{ y: -400, opacity: 0 }}
           animate={{ y: -100, opacity: 1 }}
           exit={{ y: -400, opacity: 0 }}
-          className="container flex justify-center items-center absolute top-[90%]  z-20"
+          className="container flex justify-center items-center absolute top-[300px]  z-20"
         >
           <div className="w-[60%] px-4 py-4 mx-auto shadow-2xl rounded-xl border-[1px] border-zinc-200 bg-white">
             <div className="">
@@ -104,6 +109,7 @@ const Card = () => {
                 type="text"
                 placeholder="Keep track of every project and its deadlines!"
                 minLength={4}
+                value={taskTitle}
               />
               <textarea
                 onChange={handleTask}
@@ -112,6 +118,7 @@ const Card = () => {
                 rows={3}
                 className="flex w-full outline-none text-[14px] text-gray  mt-2"
                 placeholder="description"
+                value={taskDescription}
               />
             </div>
             <div className="flex justify-between items-center my-2">

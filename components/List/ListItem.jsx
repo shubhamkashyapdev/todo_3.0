@@ -1,14 +1,7 @@
 import { CheckIcon } from "@heroicons/react/outline"
 import React from "react"
 
-const ListItem = ({
-  taskTitle,
-  taskDescription,
-  taskStatus,
-  taskTags,
-  taskPriority,
-  index,
-}) => {
+const ListItem = ({ taskTitle, taskPriority, index }) => {
   const priorityArr = ["normal", "urgent", "sensitive"]
   const priorityClassNames =
     priorityArr[taskPriority] === "normal"
